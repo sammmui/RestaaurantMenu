@@ -31,7 +31,7 @@
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
                 
-                    @* Ми передаємо id продукту ТАcategoryId, щоб знати куди повертатися *@
+                 
                     <a asp-controller="Reviews"
                        asp-action="Index"
                        asp-route-id="@item.Id"
@@ -43,7 +43,7 @@
     </tbody>
 </table>
 
-@* Кнопка повернення до ВСІХ категорій *@
+
 <p>
     <a asp-controller="Categories" asp-action="Index" class="btn btn-link">До списку категорій</a>
 </p>

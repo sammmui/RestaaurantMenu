@@ -2,10 +2,10 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Додаємо контролери (це у тебе вже є)
+
 builder.Services.AddControllersWithViews();
 
-// 2. ЦЬОГО У ТЕБЕ НЕ ВИСТАЧАЛО: Реєструємо базу даних
+
 builder.Services.AddDbContext<RestaurantMenuInfrastructure.BdrestaurantMenuContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

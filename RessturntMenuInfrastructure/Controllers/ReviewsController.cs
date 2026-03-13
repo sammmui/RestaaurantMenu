@@ -20,7 +20,7 @@ namespace RestaurantMenuInfrastructure.Controllers
         }
 
         // GET: Reviews/Index/5
-        // Показує відгуки тільки для конкретного продукту
+      
         public async Task<IActionResult> Index(int? id)
         {
             if (id == null)
@@ -28,7 +28,7 @@ namespace RestaurantMenuInfrastructure.Controllers
                 return NotFound();
             }
 
-            // Запам'ятовуємо ID продукту, щоб кнопка "Create New" його бачила
+         
             ViewData["CurrentProductId"] = id;
 
             var reviews = _context.Review
@@ -53,7 +53,7 @@ namespace RestaurantMenuInfrastructure.Controllers
         }
 
         // GET: Reviews/Create
-        // Викликається з Index відгуків, отримує productId
+     
         public IActionResult Create(int productId)
         {
             if (productId == 0)
@@ -61,7 +61,7 @@ namespace RestaurantMenuInfrastructure.Controllers
                 return BadRequest("ID продукту не передано");
             }
 
-            // Передаємо ID у ViewBag для прихованого поля у формі
+      
             ViewBag.Productsid = productId;
             return View();
         }
@@ -71,8 +71,7 @@ namespace RestaurantMenuInfrastructure.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Data,Mark,Comment,Productsid")] Review review)
         {
-            // Видаляємо перевірку навігаційної властивості Products, 
-            // бо ми заповнюємо тільки Productsid
+          
             ModelState.Remove("Products");
 
             if (ModelState.IsValid)
@@ -80,7 +79,7 @@ namespace RestaurantMenuInfrastructure.Controllers
                 _context.Add(review);
                 await _context.SaveChangesAsync();
 
-                // Повертаємо користувача назад до списку відгуків цього ж продукту
+           
                 return RedirectToAction(nameof(Index), new { id = review.Productsid });
             }
 

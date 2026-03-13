@@ -23,11 +23,10 @@ namespace RestaurantMenuInfrastructure.Controllers
 
         public async Task<IActionResult> Index(int? id, string? name)
         {
-            // Якщо id порожній, ми не знаємо, які продукти показувати
+      
             if (id == null) return RedirectToAction("Index", "Categories");
 
-            // Якщо ім'я категорії не прийшло (наприклад, при поверненні з відгуків), 
-            // краще витягнути його з бази, щоб заголовок не був порожнім
+           
             if (string.IsNullOrEmpty(name))
             {
                 var category = await _context.Category.FindAsync(id);
@@ -37,7 +36,7 @@ namespace RestaurantMenuInfrastructure.Controllers
             ViewBag.CategoryId = id;
             ViewBag.CategoryName = name;
 
-            // Знаходження продуктів за категорією
+         
             var productByCategory = _context.Product
                 .Where(b => b.Categoriesid == id)
                 .Include(b => b.Categories);
@@ -78,7 +77,7 @@ namespace RestaurantMenuInfrastructure.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Description,Categoriesid")] Product product)
         {
-            // Прибираємо Id з Bind, бо база даних сама його згенерує
+        
             if (ModelState.IsValid)
             {
                 _context.Add(product);

@@ -41,7 +41,7 @@ namespace RestaurantMenuInfrastructure.Controllers
                 return NotFound();
             }
 
-            //return Viev (category);
+          
             return RedirectToAction("Index", "Product", new { id = category, name = category.Name });
         }
        
