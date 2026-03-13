@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace RestaurantMenuDomain.Model;
 
-public partial class Review: Entity
+public partial class Review : Entity
 {
-   
+
 
     public DateTime Data { get; set; }
 

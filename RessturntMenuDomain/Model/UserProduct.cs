@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RestaurantMenuDomain.Model;
 
-public partial class UserProduct: Entity
+public partial class UserProduct : Entity
 {
     public int Productsid { get; set; }
 

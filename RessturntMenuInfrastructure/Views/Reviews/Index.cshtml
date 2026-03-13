@@ -1,0 +1,61 @@
+﻿@model IEnumerable<RestaurantMenuDomain.Model.Review>
+
+@{
+    ViewData["Title"] = "Відгуки";
+}
+
+<h1>Відгуки на страву</h1>
+
+<p>
+    @* Тут усе добре,productId підтягнеться з ViewData контролера *@
+    <a asp-action="Create" asp-route-productId="@ViewData["CurrentProductId"]" class="btn btn-primary">
+        Додати новий відгук
+    </a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Оцінка</th>
+            <th>Коментар</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="4" class="text-center">Відгуків поки немає. Будьте першим!</td>
+            </tr>
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Data.ToShortDateString()</td>
+                <td>
+                    @* Логіка зірочок: 10 балів = 5 зірок *@
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <span style="color: @(i <= (item.Mark / 2) ? "#ffc107" : "#ccc"); font-size: 20px;">★</span>
+                    }
+                    <small class="text-muted">(@item.Mark/10)</small>
+                </td>
+                <td>@item.Comment</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>
+    <a asp-controller="Products"
+           asp-action="Index"
+           asp-route-id="@ViewData["CategoryId"]"
+           class="btn btn-secondary">
+        Назад до продуктів
+    </a>

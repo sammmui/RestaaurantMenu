@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace RestaurantMenuDomain.Model;
 
-public partial class Product: Entity
+public partial class Product : Entity
 {
-  
+
     public string Name { get; set; } = null!;
 
     public string Description { get; set; } = null!;

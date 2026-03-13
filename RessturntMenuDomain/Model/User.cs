@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RestaurantMenuDomain.Model;
 
-public partial class User: Entity
+public partial class User : Entity
 {
 
 

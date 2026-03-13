@@ -1,9 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 1. Додаємо контролери (це у тебе вже є)
 builder.Services.AddControllersWithViews();
 
+// 2. ЦЬОГО У ТЕБЕ НЕ ВИСТАЧАЛО: Реєструємо базу даних
+builder.Services.AddDbContext<RestaurantMenuInfrastructure.BdrestaurantMenuContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -22,7 +29,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Categories}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 
