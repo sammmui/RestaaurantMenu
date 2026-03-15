@@ -1,34 +1,40 @@
 ﻿@model RestaurantMenuDomain.Model.Category
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редагувати";
 }
 
-<h1>Edit</h1>
+<div class="login-page-wrapper">
+    <div class="login-card">
+        <h2 class="login-title">Редагувати розділ</h2>
 
-<h4>Category</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="form-row">
+                <label asp-for="Name">Нова назва</label>
+                <div class="input-container">
+                    <input asp-for="Name" class="custom-input" placeholder="Введіть назву..." />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="button-row" style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px;">
+                <a asp-action="Index" class="back-link">← Скасувати</a>
+                <button type="submit" class="login-submit-btn">Зберегти</button>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<style>
+    html, body { background-color: #0D0D0F !important; color: white; font-family: 'Playfair Display', serif; }
+    .login-page-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
+    .login-card { background-color: #161618; padding: 50px; border-radius: 40px; width: 100%; max-width: 500px; border: 1px solid #222; }
+    .login-title { color: #E6D5C7; text-align: center; margin-bottom: 40px; font-size: 28px; letter-spacing: 1px; }
+    .custom-input { width: 100%; background-color: #0D0D0F; border: 1px solid #333; border-radius: 15px; padding: 15px; color: white; outline: none; }
+    .custom-input:focus { border-color: #E6D5C7; }
+    .login-submit-btn { background-color: #E6D5C7; color: #161618; border: none; padding: 12px 35px; border-radius: 25px; font-weight: bold; cursor: pointer; }
+    .back-link { color: #666; text-decoration: none; font-size: 14px; }
+</style>

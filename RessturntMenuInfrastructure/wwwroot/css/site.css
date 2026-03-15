@@ -1,0 +1,102 @@
+
+html {
+    scroll-behavior: smooth;
+}
+
+@font-face {
+    font-family: 'MyCustomFont'; 
+    src: url('../fonts/OpenSansCondensed.ttf') format('truetype');
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: 'KronaOne'; /* Для головного заголовка */
+    src: url('../fonts/kronaOne-Regular.ttf') format('truetype');
+}
+
+body {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    -webkit-user-drag: none;
+    user-drag: none;
+}
+
+
+.custom-nav {
+    background-color: #212023 !important;
+    padding: 12px 40px !important;
+    min-height: 65px;
+    border-bottom: 1px solid rgba(248, 204, 195, 0.2);
+    z-index: 1000;
+    position: relative;
+}
+
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+
+.japanese-title {
+    font-family: 'KronaOne', sans-serif !important;
+    color: #f8ccc3 !important;
+    font-size: 5.5rem; 
+    margin-bottom: 50px !important; 
+    text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+.slogan-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 40px !important; 
+    transition: all 0.3s ease;
+}
+
+
+.slogan-text {
+    font-family: 'MyCustomFont', sans-serif !important;
+    color: #f8ccc3 !important;
+    font-size: 24px !important;
+    font-weight: 300 !important;
+    letter-spacing: 6px !important; 
+    line-height: 1.2;
+}
+
+
+.sakura-icon {
+    width: 70px !important;
+    height: auto !important;
+    filter: sepia(20%) saturate(150%) hue-rotate(330deg) drop-shadow(0 0 10px rgba(248, 204, 195, 0.4)) !important;
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    cursor: pointer;
+}
+
+
+.slogan-wrapper:hover .sakura-icon {
+    transform: scale(1.15) rotate(20deg) !important;
+    filter: drop-shadow(0 0 15px rgba(248, 204, 195, 0.8)) !important;
+}
+
+.slogan-wrapper:hover .slogan-text {
+    text-shadow: 0 0 10px rgba(248, 204, 195, 0.5);
+}
+
+@font-face {
+    font-family: 'KaiseiOpti';
+    src: url('../fonts/KaiseiOpti-Regular.ttf') format('truetype');
+}
+
+

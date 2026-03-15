@@ -1,38 +1,226 @@
 ﻿@model IEnumerable<RestaurantMenuDomain.Model.Category>
 
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Menu";
 }
 
-<h1>Index</h1>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-                  
-            </td>
-            <td>
-                   
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-controller="Products" asp-action="Index" asp-route-id="@item.Id" asp-route-name="@item.Name">Details  </a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> 
+<div class="full-screen-wrapper">
+    <div class="menu-page">
+        <div class="menu-header">
+            <h1 class="japanese-title">Menu</h1>
+            <p class="subtitle">Справжній смак Японії у кожній страві</p>
+        </div>
 
-            </td>
-        </tr>
+      @* Перевіряємо, чи користувач — адмін *@
+@if (User.IsInRole("Admin"))
+        {
+            <div class="admin-create-zone">
+                <a asp-controller="Categories" asp-action="Create" class="admin-add-link">
+                    + Додати нову категорію
+                </a>
+            </div>
+        }
+
+<div class="category-grid">
+    @foreach (var item in Model)
+    {
+        <div class="category-item-wrapper" style="display: flex; flex-direction: column; align-items: center;">
+            
+            @* Твоя існуюча картка-посилання *@
+            <a asp-controller="Products"
+               asp-action="Index"
+               asp-route-id="@item.Id"
+               asp-route-name="@item.Name"
+               class="category-card">
+                <h3 class="category-name">@item.Name</h3>
+            </a>
+
+            @* ДОДАЄМО ЦЕЙ БЛОК: Кнопки для адміна *@
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="category-admin-actions">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="admin-btn edit">edit</a>
+                    <span class="admin-sep">|</span>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="admin-btn delete">delete</a>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+
+<style>
+    html, body {
+        background-color: #212023 !important; /* Твій темний колір з макета */
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: 100%;
+        /* Прибираємо білу смугу прокрутки (робимо її темною) */
+        scrollbar-color: #444 #212023;
+    }
+
+
+    /* Прибираємо горизонтальну прокрутку, яка створює білу смугу знизу */
+    .full-screen-wrapper {
+        overflow-x: hidden !important;
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    /* Прибираємо відступи у body, які можуть підсвічувати білим */
+    body {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+        height: 100vh;
+    }
+    /* Головний фон на весь екран */
+    .full-screen-wrapper {
+        background-color: #1E1E1E !important;
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
+        width: 100vw;
+        min-height: 100vh;
+        display: block;
+        position: relative;
+    }
+
+    .menu-page {
+        color: #F5E6E0;
+        padding: 60px 20px;
+        font-family: 'Segoe UI', sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .menu-header {
+        text-align: center;
+        margin-bottom: 80px;
+    }
+
+    .japanese-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 5rem;
+        margin-bottom: 10px;
+        color: #F5E6E0;
+    }
+
+    .subtitle {
+        color: #888;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+    }
+
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+    }
+
+   
+    .category-card {
+    background-color: #161618; 
+    border-radius: 20px;
+    width: 100%; 
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    transition: 0.3s transform;
+    border: 1px solid #222;
 }
-    </tbody>
-</table>
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            background: #2D2D2D;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+   
+    .category-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        color: #F5E6E0; /* Явно задаємо колір, щоб не був синім */
+        margin: 0;
+    }
+
+    .category-card:hover .category-name {
+        color: #FFFFFF;
+    }
+  .admin-create-zone {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .admin-category-controls {
+    margin-top: 15px; 
+}
+
+    .admin-add-link {
+        color: #E6D5C7;
+        text-decoration: none;
+        border: 1px dashed #E6D5C7;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-family: 'Playfair Display', serif;
+        transition: 0.3s;
+    }
+
+    .admin-add-link:hover {
+        background-color: #E6D5C7;
+        color: #161618;
+        border-style: solid;
+    }
+    .btn-create-cat {
+        display: inline-block;
+        color: #E6D5C7;
+        text-decoration: none;
+        border: 1px dashed #E6D5C7;
+        padding: 10px 25px;
+        border-radius: 15px;
+        transition: 0.3s;
+        font-family: serif;
+    }
+
+    .btn-create-cat:hover {
+        background-color: rgba(230, 213, 199, 0.1);
+        border-style: solid;
+        color: white;
+    }
+
+    .plus {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+    .category-admin-actions {
+        margin-top: 15px;
+        font-family: 'Playfair Display', serif;
+        font-size: 14px;
+    }
+
+    .admin-btn {
+        
+        color: #E6D5C7; 
+        text-decoration: none;
+        transition: 0.3s;
+        text-transform: lowercase;
+        opacity: 0.8; 
+    }
+
+    .admin-btn:hover {
+        opacity: 1;
+        text-shadow: 0 0 10px rgba(230, 213, 199, 0.3);
+    }
+
+    .admin-btn.delete:hover {
+        color: #ff4d4d; 
+    }
+
+    .admin-sep {
+        color: #444; 
+        margin: 0 8px;
+    }
+</style>

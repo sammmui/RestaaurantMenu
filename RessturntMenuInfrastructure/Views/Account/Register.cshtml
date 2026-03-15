@@ -1,0 +1,73 @@
+﻿@model RestaurantMenuInfrastructure.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Sign Up";
+    Layout = "_Layout";
+}
+
+<div class="login-page-wrapper">
+    <div class="login-card">
+        <h2 class="login-title">Sign Up</h2>
+
+        <form asp-action="Register" asp-controller="Account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-row">
+                <label asp-for="Email">Email</label>
+                <div class="input-container">
+                    <input asp-for="Email" class="custom-input" placeholder="Введіть Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label asp-for="Password">Password</label>
+                <div class="input-container">
+                    <input asp-for="Password" type="password" class="custom-input" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label asp-for="ConfirmPassword">Confirm</label>
+                <div class="input-container">
+                    <input asp-for="ConfirmPassword" type="password" class="custom-input" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label>Year</label>
+                <div class="input-container">
+                    <select asp-for="Year" class="custom-input custom-select">
+                        <option value="" disabled selected>Оберіть рік</option>
+                        @for (int i = 2015; i >= 1950; i--)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button type="submit" class="login-submit-btn">Зареєструватися</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+
+    footer, .border-top { display: none !important; }
+    html, body { background-color: #0D0D0F !important; height: 100%; }
+    .login-page-wrapper { display: flex; justify-content: center; align-items: center; min-height: 85vh; }
+    .login-card { background-color: #161618; padding: 50px 60px; border-radius: 40px; width: 100%; max-width: 700px; }
+    .login-title { color: #E6D5C7; text-align: center; margin-bottom: 50px; font-family: serif; font-size: 24px; }
+    .form-row { display: flex; align-items: center; margin-bottom: 25px; }
+    .form-row label { color: #E6D5C7; width: 180px; font-size: 18px; font-family: serif; }
+    .input-container { width: 100%; max-width: 350px; }
+    .custom-input { width: 100%; background-color: #0D0D0F; border: none; border-radius: 20px; padding: 12px 20px; color: white; outline: none; box-sizing: border-box; }
+    .custom-select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,..."); background-repeat: no-repeat; background-position: calc(100% - 20px) center; }
+    .login-submit-btn { background-color: #E6D5C7; color: #161618; border: none; padding: 10px 40px; border-radius: 20px; font-weight: bold; }
+    .text-danger { font-size: 12px; color: #ff4d4d; display: block; }
+</style>

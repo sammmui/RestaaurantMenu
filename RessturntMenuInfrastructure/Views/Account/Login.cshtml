@@ -1,0 +1,143 @@
+﻿@model RestaurantMenuInfrastructure.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Log in";
+    Layout = "_Layout";
+}
+
+<div class="login-page-wrapper">
+    <div class="login-card">
+        <h2 class="login-title">Log in</h2>
+
+        <form asp-action="Login" asp-controller="Account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ReturnUrl" />
+
+            <div class="form-row">
+                <label asp-for="Email">User</label>
+                <div class="input-container">
+                    <input asp-for="Email" class="custom-input" placeholder="Email або логін" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label asp-for="Password">Password</label>
+                <div class="input-container">
+                    <input asp-for="Password" type="password" class="custom-input" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label>Year</label>
+                <div class="input-container">
+                    <select class="custom-input custom-select">
+                        <option value="" disabled selected>Оберіть рік</option>
+                        @for (int i = 2010; i >= 1950; i--)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button type="submit" class="login-submit-btn">Увійти</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+   
+    footer, .border-top {
+        display: none !important;
+    }
+
+    html, body {
+        background-color: #0D0D0F !important;
+        height: 100%;
+    }
+
+    .login-page-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 85vh;
+    }
+
+    .login-card {
+        background-color: #161618;
+        padding: 50px 60px;
+        border-radius: 40px;
+        width: 100%;
+        max-width: 700px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
+
+    .login-title {
+        color: #E6D5C7;
+        text-align: center;
+        margin-bottom: 50px;
+        font-family: serif;
+        font-size: 24px;
+    }
+
+    .form-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+        .form-row label {
+            color: #E6D5C7;
+            width: 180px;
+            font-size: 18px;
+            font-family: serif;
+        }
+
+
+    .input-container {
+        width: 100%;
+        max-width: 350px; 
+    }
+
+    .custom-input {
+        width: 100%;
+        background-color: #0D0D0F;
+        border: none;
+        border-radius: 20px;
+        padding: 12px 20px;
+        color: white;
+        outline: none;
+        font-size: 16px;
+        box-sizing: border-box; 
+    }
+
+   
+    .custom-select {
+        appearance: none;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23E6D5C7' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: calc(100% - 20px) center;
+    }
+
+    .login-submit-btn {
+        background-color: #E6D5C7;
+        color: #161618;
+        border: none;
+        padding: 10px 40px;
+        border-radius: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .text-danger {
+        font-size: 14px;
+        display: block;
+        margin-top: 5px;
+    }
+</style>

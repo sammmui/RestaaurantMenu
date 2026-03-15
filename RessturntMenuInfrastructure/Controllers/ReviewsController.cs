@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RestaurantMenuDomain.Model;
 using RestaurantMenuInfrastructure;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace RestaurantMenuInfrastructure.Controllers
 {
@@ -20,16 +21,20 @@ namespace RestaurantMenuInfrastructure.Controllers
         }
 
         // GET: Reviews/Index/5
-      
-        public async Task<IActionResult> Index(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-         
-            ViewData["CurrentProductId"] = id;
+        public async Task<IActionResult> Index(int? id) // id — це ID продукту
+        {
+            if (id == null) return NotFound();
+
+           
+            var product = await _context.Product.FindAsync(id);
+
+            if (product != null)
+            {
+               
+                ViewBag.CategoryId = product.Categoriesid;
+                ViewBag.ProductId = id;
+            }
 
             var reviews = _context.Review
                 .Where(r => r.Productsid == id)
@@ -61,7 +66,7 @@ namespace RestaurantMenuInfrastructure.Controllers
                 return BadRequest("ID продукту не передано");
             }
 
-      
+
             ViewBag.Productsid = productId;
             return View();
         }
@@ -69,21 +74,21 @@ namespace RestaurantMenuInfrastructure.Controllers
         // POST: Reviews/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Data,Mark,Comment,Productsid")] Review review)
+  
+        public async Task<IActionResult> Create([Bind("Mark,Comment,Productsid")] Review review)
         {
-          
-            ModelState.Remove("Products");
+            
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            review.UserId = userId;
+            review.Data = DateTime.Now;
 
+            ModelState.Remove("Products");
             if (ModelState.IsValid)
             {
                 _context.Add(review);
                 await _context.SaveChangesAsync();
-
-           
                 return RedirectToAction(nameof(Index), new { id = review.Productsid });
             }
-
-            ViewBag.Productsid = review.Productsid;
             return View(review);
         }
 

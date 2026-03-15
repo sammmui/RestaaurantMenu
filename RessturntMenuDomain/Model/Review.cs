@@ -14,6 +14,6 @@ public partial class Review : Entity
     public string? Comment { get; set; }
 
     public int Productsid { get; set; }
-
+    public string? UserId { get; set; }
     public virtual Product Products { get; set; } = null!;
 }

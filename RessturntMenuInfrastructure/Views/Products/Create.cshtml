@@ -1,41 +1,82 @@
 ﻿@model RestaurantMenuDomain.Model.Product
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Додати страву";
 }
 
-<h1>Create</h1>
+<div class="login-page-wrapper">
+    <div class="login-card">
+        <h2 class="login-title">Нова страва</h2>
 
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div style="color: #ff4d4d; background: rgba(255,77,77,0.1); padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 14px;">
+                ⚠ @ViewBag.ErrorMessage
+            </div>
+        }
+
+        <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+
+            <div class="form-row">
+                <label asp-for="Name">Назва <span style="color: #ff4d4d;">*</span></label>
+                <div class="input-container">
+                    <input asp-for="Name" class="custom-input" placeholder="Назва страви..." required />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+
+            <div class="form-row">
+                <label asp-for="Description">Опис <span style="color: #ff4d4d;">*</span></label>
+                <div class="input-container">
+                    <textarea asp-for="Description" class="custom-input" rows="3" placeholder="Інгредієнти, вага..." required></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Categoriesid" class="control-label"></label>
-                <select asp-for="Categoriesid" class ="form-control" asp-items="ViewBag.Categoriesid"></select>
+
+            <div class="form-row">
+                <label asp-for="Categoriesid">Категорія <span style="color: #ff4d4d;">*</span></label>
+                <div class="input-container">
+                    <select asp-for="Categoriesid" class="custom-input custom-select" asp-items="ViewBag.Categoriesid" required>
+                        <option value="" disabled selected>Оберіть категорію</option>
+                    </select>
+                    <span asp-validation-for="Categoriesid" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="form-row">
+                <label asp-for="Price">Ціна (грн) <span style="color: #ff4d4d;">*</span></label> 
+                <div class="input-container">
+                    <input asp-for="Price" type="number" min="1" class="custom-input" placeholder="0" required />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="button-row" style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
+                <a href="javascript:history.back()" class="back-link">← Назад</a>
+                <button type="submit" class="login-submit-btn">Створити</button>
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+   html, body { background-color: #0D0D0F !important; color: white; font-family: 'Playfair Display', serif; }
+    .login-page-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 20px; }
+    .login-card { background-color: #161618; padding: 40px 50px; border-radius: 40px; width: 100%; max-width: 600px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .login-title { color: #E6D5C7; text-align: center; margin-bottom: 40px; font-family: serif; font-size: 28px; }
+    .form-row { display: flex; align-items: flex-start; margin-bottom: 20px; }
+    .form-row label { color: #E6D5C7; width: 150px; padding-top: 10px; font-family: serif; font-size: 16px; }
+    .input-container { flex-grow: 1; }
+    .custom-input { width: 100%; background-color: #0D0D0F; border: 1px solid #222; border-radius: 15px; padding: 12px 15px; color: white; outline: none; box-sizing: border-box; transition: 0.3s; }
+    .custom-input:focus { border-color: #E6D5C7; }
+    textarea.custom-input { resize: none; }
+    .custom-select { cursor: pointer; }
+    .login-submit-btn { background-color: #E6D5C7; color: #161618; border: none; padding: 10px 30px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    .login-submit-btn:hover { background-color: #E6D5C7; transform: scale(1.05); }
+    .back-link { color: #888; text-decoration: none; font-size: 14px; }
+    .back-link:hover { color: #E6D5C7; }
+    .text-danger { font-size: 12px; color: #ff4d4d; margin-top: 5px; display: block; }
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

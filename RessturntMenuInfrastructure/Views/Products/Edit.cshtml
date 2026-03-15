@@ -1,44 +1,227 @@
 ﻿@model RestaurantMenuDomain.Model.Product
 
-@{
-    ViewData["Title"] = "Edit";
-}
+<div class="edit-product-wrapper">
+    <div class="glass-edit-card">
+        <h2 class="edit-title">Редагувати страву</h2>
 
-<h1>Edit</h1>
-
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Categoriesid" class="control-label"></label>
-                <select asp-for="Categoriesid" class="form-control" asp-items="ViewBag.Categoriesid"></select>
-                <span asp-validation-for="Categoriesid" class="text-danger"></span>
-            </div>
+
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <input type="hidden" asp-for="Img" />
+
+            <div class="form-grid">
+                <div class="input-group">
+                    <label asp-for="Name">НАЗВА СТРАВИ</label>
+                    <input asp-for="Name" class="premium-input" placeholder="Введіть назву..." />
+                    <span asp-validation-for="Name" class="error-msg"></span>
+                </div>
+
+                <div class="input-group">
+                    <label asp-for="Price">ЦІНА (ГРН)</label>
+                    <input asp-for="Price" class="premium-input" />
+                    <span asp-validation-for="Price" class="error-msg"></span>
+                </div>
+
+                <div class="input-group full-width">
+                    <label>ФОТОГРАФІЯ СТРАВИ</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" name="upload" id="file-input" class="hidden-file-input" accept="image/*" />
+                        <label for="file-input" class="file-label">
+                            <span id="file-name">Оберіть файл з галереї...</span>
+                            <span class="btn-browse">Огляд</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input-group full-width">
+                    <label asp-for="Description">ОПИС СТРАВИ</label>
+                    <textarea asp-for="Description" class="premium-input textarea" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="error-msg"></span>
+                </div>
+                
+                <div class="input-group full-width">
+                    <label asp-for="Categoriesid">КАТЕГОРІЯ</label>
+                   
+                    <select asp-for="Categoriesid" class="premium-input custom-select-dark" asp-items="ViewBag.Categoriesid" required>
+                        <option value="" disabled>-- Оберіть категорію --</option>
+                    </select>
+                </div>
+            </div> 
+
+            <div class="action-buttons">
+                <button type="submit" class="btn-save-premium">ЗБЕРЕГТИ ЗМІНИ</button>
+                <a asp-action="Index" asp-route-id="@Model.Categoriesid" class="btn-cancel-link">Скасувати</a>
             </div>
         </form>
-    </div>
-</div>
+    </div> 
+</div> 
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+  
+    .custom-select-dark option {
+        background-color: #1a1a1c;
+        color: #fff;
+        padding: 10px;
+    }
+    
+      .glass-edit-card {
+        overflow: visible !important;
+    }
+</style>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<style>
+  html, body { background-color: #0D0D0F !important; color: white; font-family: 'Playfair Display', serif; }
+    body {
+        background-color: var(--bg-color) !important;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .edit-product-wrapper {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+        background: radial-gradient(circle at center, #1a1a1c 0%, #0d0d0f 100%);
+    }
+
+    .glass-edit-card {
+        background: var(--card-bg);
+        width: 100%;
+        max-width: 600px;
+        padding: 50px;
+        border-radius: 30px;
+        border: 1px solid #222;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        overflow: visible !important; 
+        position: relative;
+    }
+    .custom-select {
+        cursor: pointer;
+        appearance: none; 
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+        background-size: 12px;
+        padding-right: 40px !important;
+    }
+
+    .edit-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 32px;
+        color: var(--accent);
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .full-width {
+        grid-column: span 2;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+        .input-group label {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+    .premium-input {
+        width: 100%;
+        background: #0d0d0f;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 12px 15px;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        transition: 0.3s;
+    }
+
+        .premium-input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 10px rgba(230, 213, 199, 0.1);
+        }
+
+   
+    .hidden-file-input {
+        display: none;
+    }
+    
+    .file-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #0d0d0f;
+        border: 1px dashed #444;
+        padding: 10px 15px;
+        border-radius: 12px;
+        cursor: pointer;
+        color: #888;
+        font-size: 13px;
+    }
+
+    .btn-browse {
+        color: var(--accent);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 11px;
+    }
+
+   
+    .action-buttons {
+        margin-top: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .btn-save-premium {
+        background: var(--accent);
+        color: #0d0d0f;
+        border: none;
+        padding: 18px;
+        border-radius: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .btn-save-premium:hover {
+            background: white;
+            transform: translateY(-3px);
+        }
+
+    .btn-cancel-link {
+        color: #555;
+        text-decoration: none;
+        font-size: 13px;
+    }
+
+    .error-msg {
+        color: #ff4d4d;
+        font-size: 11px;
+    }
+</style>
+
+<script>
+    
+    document.getElementById('file-input').onchange = function () {
+        if (this.files.length > 0) {
+            document.getElementById('file-name').innerHTML = this.files[0].name;
+        }
+    };
+</script>

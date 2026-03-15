@@ -1,45 +1,154 @@
 ﻿@model RestaurantMenuDomain.Model.Review
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Видалення";
 }
 
-<h1>Delete</h1>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Review</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Data)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Data)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Mark)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Mark)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Comment)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Comment)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Products)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Products.Description)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+<div class="delete-wrapper-premium">
+    <div class="glass-container-delete">
+        
+        <h2 class="premium-title">Видалити відгук?</h2>
+        <p class="premium-subtitle">Ви збираєтеся назавжди видалити цей коментар.</p>
+
+        <div class="review-info-section">
+            <div class="info-group">
+                <span class="info-label">ВАША ОЦІНКА</span>
+                <div class="premium-stars">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <span class="star @(i <= Model.Mark ? "active" : "")">★</span>
+                    }
+                </div>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">ВАШ КОМЕНТАР</span>
+                <p class="premium-comment-text">"@Model.Comment"</p>
+            </div>
+        </div>
+
+        <form asp-action="Delete" class="delete-form-premium">
+            <input type="hidden" asp-for="Id" />
+            
+            <div class="premium-button-group">
+                
+                <button type="submit" class="btn-main-action">ВИДАЛИТИ НАЗАВЖДИ</button>
+                
+               
+                <a asp-action="Index" asp-route-id="@Model.Productsid" class="btn-secondary-link">
+                    Скасувати та повернутися
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
+
+<style>
+    :root {
+        --dark-bg: #0D0D0F;
+        --card-bg: #161618;
+        --gold-accent: #E6D5C7;
+        --danger: #ff4d4d;
+    }
+
+    body {
+        background-color: var(--dark-bg) !important;
+        margin: 0;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .delete-wrapper-premium {
+ min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+  
+
+    .premium-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 36px;
+        color: var(--gold-accent);
+        margin-bottom: 10px;
+    }
+
+    .premium-subtitle {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 40px;
+    }
+
+    .review-info-section {
+        text-align: left;
+        background: #0d0d0f;
+        padding: 30px;
+        border-radius: 20px;
+        margin-bottom: 40px;
+        border: 1px solid #222;
+    }
+
+    .info-group {
+        margin-bottom: 25px;
+    }
+
+    .info-group:last-child { margin-bottom: 0; }
+
+    .info-label {
+        display: block;
+        font-size: 10px;
+        letter-spacing: 2px;
+        color: #444;
+        margin-bottom: 10px;
+    }
+
+    .premium-stars { font-size: 20px; color: #333; }
+    .star.active { color: var(--gold-accent); }
+
+    .premium-comment-text {
+        color: #ccc;
+        font-style: italic;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* Кнопки */
+    .premium-button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .btn-main-action {
+        background-color: var(--gold-accent);
+        color: #0d0d0f;
+        border: none;
+        padding: 20px;
+        border-radius: 15px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.4s;
+        font-size: 14px;
+    }
+
+    .btn-main-action:hover {
+        background-color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(230, 213, 199, 0.2);
+    }
+
+    .btn-secondary-link {
+        color: #555;
+        text-decoration: none;
+        font-size: 13px;
+        transition: 0.3s;
+    }
+
+    .btn-secondary-link:hover {
+        color: white;
+    }
+</style>

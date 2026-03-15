@@ -1,61 +1,224 @@
 ﻿@model IEnumerable<RestaurantMenuDomain.Model.Review>
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Відгуки";
+    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
-<h1>Відгуки на страву</h1>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-<p>
+<div class="full-screen-wrapper">
+    <div class="reviews-container">
+        
+        <div class="reviews-header">
+            <h1 class="page-title">Відгуки на страву</h1>
+            <div class="header-actions">
+              
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-action="Create" asp-route-productId="@ViewBag.ProductId" class="btn-add-review">
+                        + Додати свій відгук
+                    </a>
+                }
+                else
+                {
+                    <p style="color: #888; font-style: italic;">
+                        Тільки зареєстровані користувачі можуть залишати відгуки. 
+                        <a asp-area="Identity" asp-page="/Account/Login" style="color: #E6D5C7; text-decoration: underline;">Увійти</a>
+                    </p>
+                }
+            </div>
+        </div>
+
+        <div class="reviews-list">
+            @if (!Model.Any())
+            {
+                <div class="no-reviews">
+                    <p>Відгуків поки немає.</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="review-card">
+                        <div class="review-meta">
+                            <span class="review-date">@item.Data.ToString("dd.MM.yyyy")</span>
+                            <div class="review-rating">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <span class="star @(i <= item.Mark ? "filled" : "")">★</span>
+                                }
+                                <span class="mark-value">@item.Mark.ToString("0.0")</span>
+                            </div>
+                        </div>
+                        <p class="review-comment">@item.Comment</p>
+                        
+                        <div class="admin-actions">
+                            @if (User.IsInRole("Admin") || (currentUserId != null && item.UserId == currentUserId))
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="admin-link-delete">
+                                    @(item.UserId == currentUserId && !User.IsInRole("Admin") ? "видалити свій відгук" : "видалити відгук")
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+      <div class="back-navigation">
   
-    <a asp-action="Create" asp-route-productId="@ViewData["CurrentProductId"]" class="btn btn-primary">
-        Додати новий відгук
-    </a>
-</p>
+    <a asp-controller="Products" 
+       asp-action="Index" 
+       asp-route-id="@ViewBag.CategoryId" 
+       class="back-link">← Назад до меню</a>
+</div>
+    </div>
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Дата</th>
-            <th>Оцінка</th>
-            <th>Коментар</th>
-            <th>Дії</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (!Model.Any())
-        {
-            <tr>
-                <td colspan="4" class="text-center">Відгуків поки немає. Будьте першим!</td>
-            </tr>
-        }
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Data.ToShortDateString()</td>
-                <td>
-                    @* Логіка зірочок: 10 балів = 5 зірок *@
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        <span style="color: @(i <= (item.Mark / 2) ? "#ffc107" : "#ccc"); font-size: 20px;">★</span>
-                    }
-                    <small class="text-muted">(@item.Mark/10)</small>
-                </td>
-                <td>@item.Comment</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
 
-<p>
-    <a asp-controller="Products"
-           asp-action="Index"
-           asp-route-id="@ViewData["CategoryId"]"
-           class="btn btn-secondary">
-        Назад до продуктів
-    </a>
+
+
+<style>
+    /* Базовий стиль як у всього сайту */
+    html, body {
+        background-color: #0D0D0F !important;
+        color: white;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .full-screen-wrapper {
+        min-height: 100vh;
+        padding: 60px 20px;
+    }
+
+    .reviews-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* Хедер */
+    .page-title {
+        font-size: 48px;
+        text-align: center;
+        margin-bottom: 10px;
+        color: white;
+    }
+
+    .header-actions {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .btn-add-review {
+        display: inline-block;
+        color: #E6D5C7;
+        text-decoration: none;
+        border: 1px dashed #E6D5C7;
+        padding: 12px 30px;
+        border-radius: 15px;
+        transition: 0.3s;
+    }
+
+    .btn-add-review:hover {
+        background-color: rgba(230, 213, 199, 0.1);
+        border-style: solid;
+    }
+
+
+    .review-card {
+        background-color: #161618;
+        border: 1px solid #222;
+        padding: 25px;
+        border-radius: 20px;
+        margin-bottom: 25px;
+        transition: 0.3s;
+    }
+
+    .review-card:hover {
+        border-color: #E6D5C7;
+        transform: translateY(-5px);
+    }
+
+    .review-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 10px;
+    }
+
+    .review-date {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .review-rating {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .star {
+        color: #333;
+        font-size: 18px;
+    }
+
+    .star.filled {
+        color: #E6D5C7; 
+    }
+
+    .mark-value {
+        margin-left: 10px;
+        font-weight: bold;
+        color: #E6D5C7;
+    }
+
+    .review-comment {
+        font-size: 18px;
+        line-height: 1.6;
+        color: #ccc;
+        font-style: italic;
+    }
+
+    
+    .admin-actions {
+        margin-top: 15px;
+        text-align: right;
+    }
+
+    .admin-link-delete {
+        color: #ff4d4d;
+        text-decoration: none;
+        font-size: 13px;
+        opacity: 0.7;
+    }
+
+    .admin-link-delete:hover {
+        opacity: 1;
+        text-decoration: underline;
+    }
+
+    
+    .no-reviews {
+        text-align: center;
+        color: #555;
+        font-size: 20px;
+        margin: 50px 0;
+    }
+
+    .back-navigation {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .back-link {
+        color: #888;
+        text-transform: uppercase;
+        text-decoration: none;
+        letter-spacing: 2px;
+        font-size: 14px;
+        transition:

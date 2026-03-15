@@ -37,3 +37,110 @@
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
+<style>
+    :root {
+        --dark-bg: #0D0D0F;
+        --card-bg: #161618;
+        --gold-accent: #E6D5C7;
+        --danger: #ff4d4d;
+    }
+
+    body {
+        background-color: var(--dark-bg) !important;
+        margin: 0;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .delete-wrapper-premium {
+ min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+  
+
+    .premium-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 36px;
+        color: var(--gold-accent);
+        margin-bottom: 10px;
+    }
+
+    .premium-subtitle {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 40px;
+    }
+
+    .review-info-section {
+        text-align: left;
+        background: #0d0d0f;
+        padding: 30px;
+        border-radius: 20px;
+        margin-bottom: 40px;
+        border: 1px solid #222;
+    }
+
+    .info-group {
+        margin-bottom: 25px;
+    }
+
+    .info-group:last-child { margin-bottom: 0; }
+
+    .info-label {
+        display: block;
+        font-size: 10px;
+        letter-spacing: 2px;
+        color: #444;
+        margin-bottom: 10px;
+    }
+
+    .premium-stars { font-size: 20px; color: #333; }
+    .star.active { color: var(--gold-accent); }
+
+    .premium-comment-text {
+        color: #ccc;
+        font-style: italic;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* Кнопки */
+    .premium-button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .btn-main-action {
+        background-color: var(--gold-accent);
+        color: #0d0d0f;
+        border: none;
+        padding: 20px;
+        border-radius: 15px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.4s;
+        font-size: 14px;
+    }
+
+    .btn-main-action:hover {
+        background-color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(230, 213, 199, 0.2);
+    }
+
+    .btn-secondary-link {
+        color: #555;
+        text-decoration: none;
+        font-size: 13px;
+        transition: 0.3s;
+    }
+
+    .btn-secondary-link:hover {
+        color: white;
+    }
+</style>

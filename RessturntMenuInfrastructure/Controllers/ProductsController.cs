@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RestaurantMenuDomain.Model;
 using RestaurantMenuInfrastructure;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RestaurantMenuInfrastructure.Controllers
 {
@@ -63,83 +64,103 @@ namespace RestaurantMenuInfrastructure.Controllers
             return View(product);
         }
 
-        // GET: Products/Create
+        
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewData["Categorysid"] = new SelectList(_context.Category, "Id", "Name");
+           
+            ViewData["Categoriesid"] = new SelectList(_context.Category, "Id", "Name");
             return View();
         }
 
-        // POST: Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Categoriesid")] Product product)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create(Product product)
         {
-        
+           
+            ModelState.Remove("Category");
+
             if (ModelState.IsValid)
             {
                 _context.Add(product);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { id = product.Categoriesid });
+
+               
+                return RedirectToAction("Index", "Home");
             }
-            ViewData["Categoriesid"] = new SelectList(_context.Category, "Id", "Name", product.Categoriesid);
+
+            ViewData["Categoryid"] = new SelectList(_context.Category, "Id", "Name", product.Categoriesid);
             return View(product);
         }
-
         // GET: Products/Edit/5
+        // ProductsController.cs
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
+            if (id == null) return NotFound();
             var product = await _context.Product.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
+            if (product == null) return NotFound();
+
+          
             ViewData["Categoriesid"] = new SelectList(_context.Category, "Id", "Name", product.Categoriesid);
+
             return View(product);
         }
 
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Description,Categoriesid,Id")] Product product)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description,Categoriesid,Img")] Product product, IFormFile? upload)
         {
-            if (id != product.Id)
-            {
-                return NotFound();
-            }
+            if (id != product.Id) return NotFound();
+
+            ModelState.Remove("Categories");
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.Id))
+                    var existingProduct = await _context.Product.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+                    if (existingProduct == null) return NotFound();
+
+                    if (upload != null && upload.Length > 0)
                     {
-                        return NotFound();
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await upload.CopyToAsync(stream);
+                        }
+                        product.Img = "/images/" + fileName;
                     }
                     else
                     {
-                        throw;
+                        product.Img = existingProduct.Img;
                     }
+
+                    _context.Update(product);
+                    await _context.SaveChangesAsync();
+
+                   
+                    return RedirectToAction("Index", new { id = product.Categoriesid });
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProductExists(product.Id)) return NotFound();
+                    else throw;
+                }
             }
+
+           
             ViewData["Categoriesid"] = new SelectList(_context.Category, "Id", "Name", product.Categoriesid);
             return View(product);
         }
+
 
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)

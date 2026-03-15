@@ -9,7 +9,8 @@ public partial class Product : Entity
     public string Name { get; set; } = null!;
 
     public string Description { get; set; } = null!;
-
+    public decimal Price { get; set; }
+    public string? Img { get; set; }
     public int? Categoriesid { get; set; }
 
     public virtual Category? Categories { get; set; }

@@ -1,0 +1,90 @@
+﻿
+
+@{
+    
+    var dish = Context.Request.Query["dishName"].ToString() ?? "Ramen";
+}
+
+<div class="dish-details-page">
+    <div class="content-wrapper">
+        
+        <div class="image-section">
+    @if(dish.ToLower() == "ramen") { 
+        <img src="~/images/ramen.png" alt="Ramen">
+    }
+    else if(dish.ToLower() == "set") { 
+        <img src="~/images/set-philadelphia.png" alt="Set Philadelphia">
+    }
+    else if(dish.ToLower() == "mochi") { 
+        <img src="~/images/mochi.png" alt="Mochi Set">
+    }
+    else if(dish.ToLower() == "matcha") { 
+        <img src="~/images/matcha (1).png" alt="Matcha Coffee">
+    }
+    else {
+        <img src="~/images/default.png" alt="Dish">
+    }
+</div>
+
+        <div class="info-section">
+            <h1 class="dish-title">
+                @if(dish.ToLower() == "ramen") { <text>Ramen "Tonkotsu"</text> }
+                else if(dish.ToLower() == "set") { <text>Set "Philadelphia"</text> }
+                else if(dish.ToLower() == "mochi") { <text>Mochi Set</text> }
+                else { <text>Coffe "Matcha"</text> }
+            </h1>
+            
+            <div class="description-block">
+                <h3>Description</h3>
+                <p>Найкраща страва у нашому меню, приготована за традиційним рецептом.</p>
+                <span class="portion">@(dish.ToLower() == "mochi" ? "4 шт" : "1 шт")</span>
+            </div>
+
+          <div class="nav-links">
+    <a href="javascript:history.back()" class="back-link">← back</a>
+</div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    body { background-color: #212023 !important; margin: 0; }
+    
+    .dish-details-page {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+    }
+
+    .content-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 100px;
+        max-width: 1300px;
+        width: 100%;
+    }
+
+    /* ФОТО ТЕПЕР ВЕЛИКЕ */
+    .image-section { flex: 1.2; display: flex; justify-content: center; }
+    .image-section img { 
+        width: 100%; 
+        max-width: 650px; 
+        filter: drop-shadow(0 20px 50px rgba(0,0,0,0.8)); 
+    }
+
+    .info-section { flex: 1; color: #f8ccc3; font-family: 'KaiseiOpti', serif; }
+    .dish-title { font-size: 5rem; margin: 0 0 30px 0; line-height: 1; }
+    .description-block h3 { font-size: 2rem; margin-bottom: 10px; font-weight: 400; }
+    .description-block p { font-size: 1.2rem; opacity: 0.8; max-width: 450px; margin-bottom: 20px; }
+    .portion { display: block; font-size: 1.5rem; margin-bottom: 50px; }
+    
+    .nav-links { text-align: right; }
+    .back-link { color: #f8ccc3; text-decoration: none; font-size: 1.5rem; opacity: 0.6; }
+    .back-link:hover { opacity: 1; }
+
+  
+ 
+</style>

@@ -59,24 +59,30 @@ public partial class BdrestaurantMenuContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("period");
         });
-
         modelBuilder.Entity<Product>(entity =>
         {
             entity.ToTable("PRODUCTS");
 
             entity.Property(e => e.Id).HasColumnName("id");
+
             entity.Property(e => e.Description)
                 .HasMaxLength(150)
                 .HasColumnName("description");
+
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
 
-            entity.HasOne(d => d.Categories).WithMany(p => p.Products)
-                .HasForeignKey(d => d.Categoriesid)
-                .HasConstraintName("FK_PRODUCTS_CATEGORIES");
-        });
+            entity.Property(e => e.Price)
+                .HasColumnType("decimal(18,2)")
+                .HasColumnName("price");
 
+            entity.HasOne(d => d.Categories).WithMany(p => p.Products)
+        .HasForeignKey(d => d.Categoriesid)
+        .OnDelete(DeleteBehavior.Cascade) 
+        .HasConstraintName("FK_PRODUCTS_CATEGORIES");
+
+        });
         modelBuilder.Entity<ProductDiscount>(entity =>
         {
             entity
@@ -89,9 +95,9 @@ public partial class BdrestaurantMenuContext : DbContext
                 .HasConstraintName("FK_PRODUCT DISCOUNTS_DISCOUNTS");
 
             entity.HasOne(d => d.Products).WithMany()
-                .HasForeignKey(d => d.Productsid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PRODUCT DISCOUNTS_PRODUCTS");
+     .HasForeignKey(d => d.Productsid)
+     .OnDelete(DeleteBehavior.Cascade) 
+     .HasConstraintName("FK_PRODUCT DISCOUNTS_PRODUCTS");
         });
 
         modelBuilder.Entity<Review>(entity =>
@@ -110,9 +116,10 @@ public partial class BdrestaurantMenuContext : DbContext
                 .HasColumnName("mark");
 
             entity.HasOne(d => d.Products).WithMany(p => p.Reviews)
-                .HasForeignKey(d => d.Productsid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_REVIEWS_PRODUCTS");
+                .HasForeignKey(d => d.Productsid);
+            entity.HasOne(d => d.Products).WithMany(p => p.Reviews)
+    .HasForeignKey(d => d.Productsid);
+
         });
 
         modelBuilder.Entity<User>(entity =>
